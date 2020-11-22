@@ -17,6 +17,7 @@
             <table class="datatable table">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Title</th>
                         <th>Category</th>
                         <th>Created at</th>
@@ -25,6 +26,7 @@
                 <tbody>
                     @foreach($posts ?? [] as  $post)
                         <tr>
+                            <td>{{$post->id}}</td>
                             <td>{{$post->title}}</td>
                             <td>{{$post->category->name}}</td>
                             <td>{{$post->created_at}}</td>
@@ -33,6 +35,6 @@
                 </tbody>
             </table>
         </div>
-        {{ $posts->links('default') }}
+        {{ $posts->links('pagination::bootstrap-4') }}
     </div>
 </div>

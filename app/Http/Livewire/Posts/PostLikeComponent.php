@@ -7,6 +7,11 @@ use Livewire\Component;
 class PostLikeComponent extends Component
 {
     public $post, $count = 0;
+    public $user;
+
+    protected $listeners = [
+        'refreshPostLikeComponent' => '$refresh'
+    ];
 
     public function render()
     {
@@ -17,5 +22,14 @@ class PostLikeComponent extends Component
     {
         $this->post = $post;
         $this->count = $post->likeCount;
+        $this->user = auth()->user();
+    }
+
+    public function doLike()
+    {
+        $this->post->like($this->user->id);
+        $this->count = $this->post->likeCount;
+        dd($this->count);
+        // $this->emitSelf('refreshPostLikeComponent');
     }
 }

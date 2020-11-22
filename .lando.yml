@@ -1,0 +1,4 @@
+name: tivewire
+recipe: lemp
+config:
+  webroot: .

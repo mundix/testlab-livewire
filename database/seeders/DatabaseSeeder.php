@@ -17,14 +17,13 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-        User::factory(1)->create(
-            [
+        User::factory(1)->create([
                 'name' => 'Test Lab',
                 'email' => 'test@test.com',
                 'password' => \Hash::make('12345')
-            ]
-            );
+            ]);
+            User::factory(20)->create();
         PostCategory::factory(10)->create();
-        Post::factory(100)->create();
+        Post::factory(500)->create();
     }
 }

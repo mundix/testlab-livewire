@@ -21,7 +21,7 @@ class PostComponent extends Component
         $posts = Post::when(!empty($this->searchQuery), function($query){
             $query->where('title', 'like', '%'.$this->searchQuery.'%');
         })
-        ->when(!empty($this->category), function($query){
+        ->when(!empty(trim($this->category)) && $this->category !=='', function($query){
             $query->where('category_id', $this->category);
         })
         ->paginate(20);

@@ -23,6 +23,7 @@ class PostLikeComponent extends Component
     {
         $this->post = $post;
         $this->count = $post->likeCount;
+        $this->liked = $this->count ? true:false;
         $this->user = auth()->user();
     }
 
@@ -45,6 +46,8 @@ class PostLikeComponent extends Component
                 $this->count = $this->count - 1;
 
         }
+
+        $this->liked = $this->count ? true:false;
 
     }
 }

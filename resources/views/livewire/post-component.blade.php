@@ -13,26 +13,42 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-8">
+        <h3>
+            Found: <strong>{{$posts->total()}}</strong>
+        </h3>
+    </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             <table class="datatable table">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Title</th>
                         <th>Category</th>
+                        <th>Likes</th>
                         <th>Created at</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($posts ?? [] as  $post)
                         <tr>
+                            <td>{{$post->id}}</td>
                             <td>{{$post->title}}</td>
                             <td>{{$post->category->name}}</td>
+                            <td>
+                                <span>
+                                    <i class="far fa-thumbs-up"></i>
+                                    {{$post->likeCount}}
+                                </span>
+                            </td>
                             <td>{{$post->created_at}}</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        {{ $posts->links('default') }}
+        {{ $posts->links('pagination::bootstrap-4') }}
     </div>
 </div>

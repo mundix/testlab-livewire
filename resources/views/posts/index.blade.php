@@ -11,9 +11,7 @@
     </div>
     <div class="row">
         <div class="col-md-8">
-            <table class="datatable table">
-                @livewire('post-component');
-            </table>
+            @livewire('post-component');
         </div>
     </div>
 </div>

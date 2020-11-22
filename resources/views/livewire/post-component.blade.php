@@ -33,5 +33,6 @@
                 </tbody>
             </table>
         </div>
+        {{ $posts->links('default') }}
     </div>
 </div>

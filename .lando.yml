@@ -1,4 +1,119 @@
 name: tivewire
 recipe: lemp
+
+env_file:
+  - .env
+
+keys:
+  - id_rsa
+
 config:
-  webroot: .
+  php: '7.4'
+  via: nginx
+  database: mysql
+  xdebug: true
+  webroot: public
+  config:
+    php: .lando/php.ini
+    vhosts: .lando/nginx.conf
+    database: .lando/mysql.conf
+
+services:
+  appserver:
+    build_as_root:
+      - echo 'Installing media library system tools...'
+      - apt-get update -y
+      - apt install jpegoptim optipng pngquant gifsicle ffmpeg -y
+      - echo 'System tools installed successfully...'
+    overrides:
+      environment:
+        # Support debugging with XDEBUG.
+        PHP_IDE_CONFIG: "serverName=appserver"
+
+  cache:
+    type: redis
+    portforward: true
+
+  node:
+    type: node:13
+    globals:
+      yarn: latest
+    ports:
+      - 3301:3301
+
+  database:
+    portforward: 3330
+
+  mailhog:
+    type: mailhog
+    hogfrom:
+      - appserver
+#
+#  pma:
+#    type: phpmyadmin
+#    hosts:
+#      - database
+
+proxy:
+  mailhog:
+    - mailhog.lndo.site
+#  pma:
+#    - pma.lndo.site
+
+tooling:
+  yarn:
+    service: node
+
+  redis-cli:
+    service: cache
+
+  artisan:
+    service: appserver
+    cmd: php artisan
+
+  install-project:
+    service: appserver
+    cmd:
+      - echo "Installing laravel..."
+      - cp .env.example .env
+      - composer install --no-interaction --prefer-dist --optimize-autoloader
+      - php artisan down
+      - php artisan key:generate
+      - php artisan config:cache
+      - composer dump-autoload
+      - php artisan migrate:fresh --seed
+      - php artisan ide-helper:generate
+      - php artisan up
+      - php artisan clear-compiled
+      - php artisan optimize
+      - node: yarn install
+      - echo "Laravel project installed successfully!!!"
+    description: 'Install project dependencies.'
+
+  clean-deps:
+    service: appserver
+    cmd:
+      - rm -rf /app/bootstrap/cache/*.php
+      - rm -rf /app/vendor
+      - find . -name "node_modules" -exec rm -rf '{}' +
+
+  clear-cache:
+    service: appserver
+    cmd:
+      - rm _ide_helper.php
+      - rm -rf /app/bootstrap/cache/*.php
+      - php artisan optimize
+      - php artisan ide-helper:generate
+      - truncate -s 0 /app/storage/logs/laravel.log
+
+  xdon: # xdebug on
+    service: appserver
+    description: Enable xdebug for nginx.
+    cmd: docker-php-ext-enable xdebug && pkill -o -USR2 php-fpm
+    user: root
+
+  xdoff: # xdebug off
+    service: appserver
+    description: Disable xdebug for nginx.
+    cmd: rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && pkill -o -USR2 php-fpm
+    user: root

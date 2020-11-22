@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\PostCategory;
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,5 +17,14 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+        User::factory(1)->create(
+            [
+                'name' => 'Test Lab',
+                'email' => 'test@test.com',
+                'password' => \Hash::make('12345')
+            ]
+            );
+        PostCategory::factory(10)->create();
+        Post::factory(100)->create();
     }
 }

@@ -39,4 +39,10 @@ class PostComponent extends Component
         $this->searchQuery = '';
         $this->category = '';
     }
+
+    public function updatingSearchQuery()
+    {
+        $this->resetPage();
+    }
+
 }

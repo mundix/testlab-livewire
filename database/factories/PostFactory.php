@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Post;
 use App\Models\PostCategory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PostFactory extends Factory
@@ -23,7 +24,7 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => 1,
+            'user_id' => $this->faker->randomElement(User::pluck('id')),
             'title' => $this->faker->name,
             'content' => $this->faker->paragraph,
             'category_id' => $this->faker->randomElement(PostCategory::pluck('id'))

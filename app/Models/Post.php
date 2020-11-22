@@ -10,10 +10,13 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\File;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+use Conner\Likeable\Likeable;
+
 class Post extends Model implements HasMedia
 {
     use InteractsWithMedia;
     use HasFactory;
+    use Likeable;
 
     protected $fillable = ['title', 'content'];
 

@@ -38,10 +38,8 @@
                             <td>{{$post->title}}</td>
                             <td>{{$post->category->name}}</td>
                             <td>
-                                <span>
-                                    <i class="far fa-thumbs-up"></i>
-                                    {{$post->likeCount}}
-                                </span>
+                                @livewire('posts.post-like-component', ['post' => $post], key('post-like-'.$post->id))
+
                             </td>
                             <td>{{$post->created_at}}</td>
                         </tr>
